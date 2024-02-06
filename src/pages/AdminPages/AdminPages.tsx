@@ -42,10 +42,10 @@ export function AdminPages() {
 	};
 
 	const columns = [
-		// {
-		// 	title: '№',
-		// 	dataIndex: 'id'
-		// },
+		{
+			title: '№',
+			dataIndex: 'id'
+		},
 		{
 			title: 'Title',
 			dataIndex: 'title'
