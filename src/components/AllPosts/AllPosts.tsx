@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PREFIX } from '../../API/API';
+import { PREFIX } from '../../helpers/API';
 import { Post } from '../../interfaces/post.interfae';
 import { Button, Table } from 'antd';
 import style from './AllPosts.module.css';
