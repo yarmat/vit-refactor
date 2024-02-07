@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Login } from './pages/Login/Login';
-import { AdminPages } from './pages/AdminPages/AdminPages';
+import Login from './pages/Login/Login';
+import AllPosts from './components/AllPosts/AllPosts';
 import { Post } from './pages/Post/Post';
+import { Error } from './pages/Error/Error';
 
 const router = createBrowserRouter([
 	{
@@ -12,12 +13,16 @@ const router = createBrowserRouter([
 		element: <Login />
 	},
 	{
-		path: '/admin',
-		element: <AdminPages />
+		path: '/posts',
+		element: <AllPosts />
 	},
 	{
-		path: '/admin/:id',
+		path: '/posts/:id',
 		element: <Post />
+	},
+	{
+		path: '*',
+		element: <Error />
 	}
 ]);
 
