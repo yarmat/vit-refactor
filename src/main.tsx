@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './pages/Login/Login';
-import AllPosts from './components/AllPosts/AllPosts';
+import AllPosts from './pages/AllPosts/AllPosts';
 import { Post } from './pages/Post/Post';
 import { Error } from './pages/Error/Error';
 
