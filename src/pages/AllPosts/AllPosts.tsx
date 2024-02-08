@@ -8,13 +8,11 @@ import axios from 'axios';
 
 
 const AllPosts: React.FC = () => {
-
 	const [dataSource, setDataSource] = useState<Post[]>([]);
 	const [editRecord, setEditRecord] = useState<Post | null>(null);
 	const [editTitle, setEditTitle] = useState<string>('');
 	const [editBody, setEditBody] = useState<string>('');
 
- 
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -30,7 +28,13 @@ const AllPosts: React.FC = () => {
 	};
 
 	const handleDelete = (id: number) => {
-		setDataSource(prevdataSource => prevdataSource.filter(post => post.id !== id));
+		axios.delete(`${PREFIX}/posts/${id}`)
+			.then(() => {
+				setDataSource(prevdataSource => prevdataSource.filter(post => post.id !== id));
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	};
 
 	const handleEdit = (record: Post) => {
@@ -46,9 +50,18 @@ const AllPosts: React.FC = () => {
 				const updatedDataSource = [...dataSource];
 				updatedDataSource[editedIndex].title = editTitle;
 				updatedDataSource[editedIndex].body = editBody;
-				setDataSource(updatedDataSource);
+				axios.put(`${PREFIX}/posts/${editRecord.id}`, {
+					title: editTitle,
+					body: editBody
+				})
+					.then(() => {
+						setDataSource(updatedDataSource);
+						setEditRecord(null);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 			}
-			setEditRecord(null);
 		}
 	};
 
@@ -107,5 +120,6 @@ const AllPosts: React.FC = () => {
 };
 
 export default AllPosts;
+
 
 
