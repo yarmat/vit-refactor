@@ -1,24 +1,27 @@
-import { useEffect, useState } from 'react';
-import { PREFIX } from '../../helpers/API';
-import { Post } from '../../interfaces/post.interfae';
-import { Button, Input, Modal, Table } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import style from './AllPosts.module.css';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { PREFIX } from '../../helpers/API';
+import { PostProps } from '../../interfaces/post.interfase';
+import { Button, Input, Modal, Table, FloatButton } from 'antd';
+import { DeleteOutlined, EditOutlined, PlusOutlined, FileSearchOutlined } from '@ant-design/icons';
+import style from './AllPosts.module.css';
+import { Link } from 'react-router-dom';
 
 const AllPosts: React.FC = () => {
-	const [dataSource, setDataSource] = useState<Post[]>([]);
-	const [editRecord, setEditRecord] = useState<Post | null>(null);
+	const [dataSource, setDataSource] = useState<PostProps[]>([]);
+	const [editRecord, setEditRecord] = useState<PostProps | null>(null);
 	const [editTitle, setEditTitle] = useState<string>('');
 	const [editBody, setEditBody] = useState<string>('');
+	const [addPost, setAddPost] = useState<boolean>(false);
+	const [newTitle, setNewTitle] = useState<string>('');
+	const [newBody, setNewBody] = useState<string>('');
 
 	useEffect(() => {
 		fetchData();
 	}, []);
 
 	const fetchData = () => {
-		axios.get<Post[]>(`${PREFIX}/posts?_start=5&_limit=40`)
+		axios.get<PostProps[]>(`${PREFIX}/posts?_start=0&_limit=10`)
 			.then((res) => {
 				setDataSource(res.data);
 			})
@@ -37,7 +40,7 @@ const AllPosts: React.FC = () => {
 			});
 	};
 
-	const handleEdit = (record: Post) => {
+	const handleEdit = (record: PostProps) => {
 		setEditRecord(record);
 		setEditTitle(record.title);
 		setEditBody(record.body);
@@ -65,6 +68,19 @@ const AllPosts: React.FC = () => {
 		}
 	};
 
+	const addingPost = () => {
+		axios.post<PostProps>(`${PREFIX}/posts`, {
+			title: newTitle,
+			body: newBody
+		})
+			.then((res) => {
+				setDataSource(prevdataSource => [res.data, ...prevdataSource]);
+				setAddPost(false);
+				setNewTitle('');
+				setNewBody('');
+			});
+	};
+
 	const columns = [
 		{
 			title: 'Title',
@@ -79,7 +95,7 @@ const AllPosts: React.FC = () => {
 		{
 			title: 'Action',
 			key: 'action',
-			render: (record: Post) => (
+			render: (record: PostProps) => (
 				<div>
 					<Button 
 						key={record.id} 
@@ -87,6 +103,7 @@ const AllPosts: React.FC = () => {
 						danger
 					><DeleteOutlined /></Button>
 					<Button onClick={() => handleEdit(record)}><EditOutlined /></Button>
+					<Link to={`${record.id}`}><Button><FileSearchOutlined /></Button></Link> 
 				</div>
 			)
 		}
@@ -94,6 +111,27 @@ const AllPosts: React.FC = () => {
 
 	return (
 		<div className={style['table']}>
+			<div>
+				<FloatButton tooltip={<div>Add Post</div>} type="primary" onClick={() => setAddPost(true)} icon={<PlusOutlined />}/>
+			</div>
+			<Modal 
+				title="Add Post"
+				open={addPost}
+				onCancel={() => setAddPost(false)}
+				onOk={addingPost}
+			>
+				<Input 
+					placeholder="Title"
+					value={newTitle}
+					onChange={(e) => setNewTitle(e.target.value)}
+				/>
+				<Input.TextArea 
+					placeholder="Body"
+					value={newBody}
+					onChange={(e) => setNewBody(e.target.value)}
+				/>
+			</Modal>
+
 			<Table
 				columns={columns}
 				rowKey="id"  
@@ -120,6 +158,3 @@ const AllPosts: React.FC = () => {
 };
 
 export default AllPosts;
-
-
-
