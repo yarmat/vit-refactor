@@ -26,7 +26,7 @@ const AllPosts: React.FC = () => {
 		axios.get<PostProps[]>(`${PREFIX}/posts?page=${currentPage}`)
 			.then((res) => {
 				setDataSource(res.data);
-				setTotalPages(res.headers['x-total-count'] ? Math.ceil(parseInt(res.headers['x-total-count']) / 10) : 0);
+				setTotalPages(res.headers['x-total-count']);
 			})
 			.catch((error) => {
 				console.error(error);
