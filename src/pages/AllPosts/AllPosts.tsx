@@ -15,15 +15,18 @@ const AllPosts: React.FC = () => {
 	const [addPost, setAddPost] = useState<boolean>(false);
 	const [newTitle, setNewTitle] = useState<string>('');
 	const [newBody, setNewBody] = useState<string>('');
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [totalPages, setTotalPages] = useState<number>(0);
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [currentPage]);
 
 	const fetchData = () => {
-		axios.get<PostProps[]>(`${PREFIX}/posts?_start=0&_limit=10`)
+		axios.get<PostProps[]>(`${PREFIX}/posts?page=${currentPage}`)
 			.then((res) => {
 				setDataSource(res.data);
+				setTotalPages(res.headers['x-total-count'] ? Math.ceil(parseInt(res.headers['x-total-count']) / 10) : 0);
 			})
 			.catch((error) => {
 				console.error(error);
@@ -79,6 +82,10 @@ const AllPosts: React.FC = () => {
 				setNewTitle('');
 				setNewBody('');
 			});
+	};
+
+	const handlePaginationChange = (page: number) => {
+		setCurrentPage(page);
 	};
 
 	const columns = [
@@ -137,6 +144,11 @@ const AllPosts: React.FC = () => {
 				rowKey="id"  
 				dataSource={dataSource}
 				bordered={true} 
+				pagination={{
+					current: currentPage,
+					total: totalPages * 10,
+					onChange: handlePaginationChange
+				}}
 			/>
 			<Modal 
 				title="Edit"
