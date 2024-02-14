@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PREFIX } from '../../helpers/API';
-import { PostProps } from '../../interfaces/post.interfase';
+import { PostProps } from '../../interfaces/post.interface';
 import { useParams } from 'react-router-dom';
 import { Result } from 'antd';
 

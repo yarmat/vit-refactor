@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PREFIX } from '../../helpers/API';
-import { PostProps } from '../../interfaces/post.interfase';
-import { Button, Input, Modal, Table, FloatButton } from 'antd';
+import { PostProps } from '../../interfaces/post.interface';
+import { Button, Input, Modal, Table, FloatButton, Spin } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined, FileSearchOutlined } from '@ant-design/icons';
 import style from './AllPosts.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AllPosts: React.FC = () => {
 	const [dataSource, setDataSource] = useState<PostProps[]>([]);
@@ -17,20 +17,32 @@ const AllPosts: React.FC = () => {
 	const [newBody, setNewBody] = useState<string>('');
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [totalPages, setTotalPages] = useState<number>(0);
+	const [loading, setLoading] = useState<boolean>(false);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		fetchData();
 	}, [currentPage]);
 
 	const fetchData = () => {
+		setLoading(true);
 		axios.get<PostProps[]>(`${PREFIX}/posts?page=${currentPage}`)
 			.then((res) => {
-				setDataSource(res.data);
-				setTotalPages(res.headers['x-total-count']);
+				setTimeout(() => { 
+					setDataSource(res.data);
+					setTotalPages(res.headers['x-total-count']);
+					setLoading(false);
+					window.scrollTo(0, 0);
+				}, 1000); 
 			})
 			.catch((error) => {
 				console.error(error);
+				setLoading(false); 
 			});
+	};
+
+	const handlePaginationChange = (page: number) => {
+		setCurrentPage(page);
 	};
 
 	const handleDelete = (id: number) => {
@@ -84,10 +96,6 @@ const AllPosts: React.FC = () => {
 			});
 	};
 
-	const handlePaginationChange = (page: number) => {
-		setCurrentPage(page);
-	};
-
 	const columns = [
 		{
 			title: 'Title',
@@ -118,6 +126,7 @@ const AllPosts: React.FC = () => {
 
 	return (
 		<div className={style['table']}>
+			<Button className={style['logout']} onClick={() => navigate('/')}>Logout</Button>
 			<div>
 				<FloatButton tooltip={<div>Add Post</div>} type="primary" onClick={() => setAddPost(true)} icon={<PlusOutlined />}/>
 			</div>
@@ -138,18 +147,22 @@ const AllPosts: React.FC = () => {
 					onChange={(e) => setNewBody(e.target.value)}
 				/>
 			</Modal>
+			<Spin spinning={loading} tip="Loading..." size="large">
+				<Table
+					columns={columns}
+					rowKey="id"  
+					dataSource={dataSource}
+					bordered={true} 
+					pagination={{
+						current: currentPage,
+						total: totalPages * 10,
+						onChange: handlePaginationChange
+					}}
+				/>
 
-			<Table
-				columns={columns}
-				rowKey="id"  
-				dataSource={dataSource}
-				bordered={true} 
-				pagination={{
-					current: currentPage,
-					total: totalPages * 10,
-					onChange: handlePaginationChange
-				}}
-			/>
+
+			</Spin>
+
 			<Modal 
 				title="Edit"
 				open={!!editRecord}
@@ -170,3 +183,4 @@ const AllPosts: React.FC = () => {
 };
 
 export default AllPosts;
+

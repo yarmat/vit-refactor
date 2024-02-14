@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Spin } from 'antd';
+import { Form, Input, Button, Spin, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import style from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ const Login: React.FC = () => {
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null); 
 	const navigate = useNavigate();
 
 	const handleLogin = () => {
@@ -16,9 +17,12 @@ const Login: React.FC = () => {
 			setTimeout(() => {
 				setLoading(false);
 				navigate('/posts');
-			}, 3000);
+			}, 2000);
 		} else {
-			console.log('Incorrect');
+			setError('Incorrect username or password');
+			setTimeout(() => {
+				setError(null);
+			}, 2000);
 			setLoading(false);
 		}
 	};
@@ -29,7 +33,6 @@ const Login: React.FC = () => {
 				<Form.Item className={style['username']}
 					label="Username"
 					name="username"
-					rules={[{ required: true, message: 'input your username!' }]}
 				>
 					<Input className={style['input-user']}
 						value={username}
@@ -41,7 +44,6 @@ const Login: React.FC = () => {
 				<Form.Item className={style['password']}
 					label="Password"
 					name="password"
-					rules={[{ required: true, message: 'input your password!' }]}
 				>
 					<Input.Password className={style['input-pas']}
 						value={password}
@@ -50,13 +52,15 @@ const Login: React.FC = () => {
 					/>
 				</Form.Item>
 
-				<Form.Item >
+				<Form.Item className={style['submit']}>
 					<Button type="primary" htmlType="submit" onClick={handleLogin}> Login </Button>
 				</Form.Item>
-				<div className={style['spin']}>
-					<Spin spinning={loading} />
-				</div>
+				<Spin spinning={loading} fullscreen={true}/>
 			</Form>
+			{error && <Alert 
+				message={error}
+				type='error'
+				showIcon />}
 		</div>
 	);
 };
