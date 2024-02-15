@@ -3,12 +3,17 @@ import axios from 'axios';
 import { PREFIX } from '../../helpers/API';
 import { PostProps } from '../../interfaces/post.interface';
 import { useParams } from 'react-router-dom';
-import { Result } from 'antd';
+import { Result, Button, Card, List, Typography } from 'antd';
+import { Comments } from '../../interfaces/comments.interface';
+
+const { Text, Paragraph } = Typography;
 
 const Post: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [post, setPost] = useState<PostProps | null>(null);
+	const [comments, setComments] = useState<Comments[]>([]);
 	const [notFound, setNotFound] = useState<boolean>(false);
+	const [loadedComments, setLoadedComments] = useState<number>(0);
 
 	useEffect(() => {
 		const fetchPost = async () => {
@@ -22,6 +27,30 @@ const Post: React.FC = () => {
 		fetchPost();
 	}, [id]);
 
+	useEffect(() => {
+		if (post) {
+			const fetchComments = async () => {
+				try {
+					const response = await axios.get<Comments[]>(`${PREFIX}/comments?_start=0&_limit=5`);
+					setComments(response.data);
+				} catch (error) {
+					console.error(error);
+				}
+			};
+			fetchComments();
+		}
+	}, [post]);
+
+	const loadMoreComments = async () => {
+		try {
+			const response = await axios.get<Comments[]>(`${PREFIX}/comments?_start=${loadedComments}&_limit=5`);
+			setComments([...comments, ...response.data]);
+			setLoadedComments(loadedComments + 5);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	if(notFound) {
 		return <Result 
 			status='404'
@@ -32,8 +61,26 @@ const Post: React.FC = () => {
 
 	return (
 		<div>
-			<h1>{post?.title}</h1>
-			<p>{post?.body}</p>
+			{post && (
+				<Card title={post.title}>
+					<Paragraph>{post.body}</Paragraph>
+					<div>
+						<h2>Comments</h2>
+						<List
+							dataSource={comments}
+							renderItem={(comment: Comments) => (
+								<Card title={comment.name}>
+									<Paragraph>{comment.body}</Paragraph>
+									<Text>Email: {comment.email}</Text>
+								</Card>
+							)}
+						/>
+						{comments.length > 0 && (
+							<Button onClick={loadMoreComments}>Load More</Button>
+						)}
+					</div>
+				</Card>
+			)}
 		</div>
 	);
 };
