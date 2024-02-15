@@ -5,6 +5,7 @@ import { PostProps } from '../../interfaces/post.interface';
 import { useParams } from 'react-router-dom';
 import { Result, Button, Card, List, Typography } from 'antd';
 import { Comments } from '../../interfaces/comments.interface';
+import style from './Post.module.css';
 
 const { Text, Paragraph } = Typography;
 
@@ -65,18 +66,18 @@ const Post: React.FC = () => {
 				<Card title={post.title}>
 					<Paragraph>{post.body}</Paragraph>
 					<div>
-						<h2>Comments</h2>
+						<h2 className={style['comments']}>Comments</h2>
 						<List
 							dataSource={comments}
 							renderItem={(comment: Comments) => (
 								<Card title={comment.name}>
 									<Paragraph>{comment.body}</Paragraph>
-									<Text>Email: {comment.email}</Text>
+									<Text className={style['email']}>Email: {comment.email}</Text>
 								</Card>
 							)}
 						/>
 						{comments.length > 0 && (
-							<Button onClick={loadMoreComments}>Load More</Button>
+							<Button className={style['button']} onClick={loadMoreComments}>Load More</Button>
 						)}
 					</div>
 				</Card>
