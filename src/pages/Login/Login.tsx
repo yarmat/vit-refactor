@@ -3,6 +3,7 @@ import { Form, Input, Button, Spin, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import style from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState<string>('');
@@ -10,12 +11,14 @@ const Login: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null); 
 	const navigate = useNavigate();
+	const {login} = useAuth();
 
 	const handleLogin = () => {
 		setLoading(true);
 		if (username === '123' && password === '123') {
 			setTimeout(() => {
 				setLoading(false);
+				login();
 				navigate('/posts');
 			}, 2000);
 		} else {

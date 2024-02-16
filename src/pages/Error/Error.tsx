@@ -1,6 +1,6 @@
 import { Result } from 'antd';
 
-export function Error() {
+export default function Error() {
 	return <Result 
 		status='404'
 		title='404'
