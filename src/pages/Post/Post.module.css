@@ -10,3 +10,15 @@
     background-color: antiquewhite;
 }
 
+.btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px ;
+}
+
+.breadcrumb {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center ;
+}
+

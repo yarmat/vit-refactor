@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../pages/AuthContext'; 
+import { useAuth } from '../context/AuthContext'; 
 
 const { Content } = Layout;
 

@@ -1,8 +1,6 @@
-.table {
-    margin: 0;
-    width: 100%;
-}
-
-.logout{
-    background-color: blueviolet;
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: yellow;
 }

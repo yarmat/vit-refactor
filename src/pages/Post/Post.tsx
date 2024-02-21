@@ -3,11 +3,13 @@ import axios from 'axios';
 import { PREFIX } from '../../helpers/API';
 import { PostProps } from '../../interfaces/post.interface';
 import { useParams } from 'react-router-dom';
-import { Result, Button, Card, List, Typography } from 'antd';
+import { Result, Button, Card, List, Typography, Breadcrumb, Space } from 'antd';
 import { Comments } from '../../interfaces/comments.interface';
 import style from './Post.module.css';
 
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
+
+
 
 const Post: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -62,26 +64,48 @@ const Post: React.FC = () => {
 
 	return (
 		<div>
-			{post && (
-				<Card title={post.title}>
-					<Paragraph>{post.body}</Paragraph>
-					<div>
-						<h2 className={style['comments']}>Comments</h2>
-						<List
-							dataSource={comments}
-							renderItem={(comment: Comments) => (
-								<Card title={comment.name}>
-									<Paragraph>{comment.body}</Paragraph>
-									<Text className={style['email']}>Email: {comment.email}</Text>
-								</Card>
+			<Space direction='vertical' size={30}>
+				<Breadcrumb className={style['breadcrumb']}
+					separator='>'
+					items={[
+						{
+							title: <a href="/posts">All posts</a>
+						},
+						{
+							title: post ? post.title : ''
+						}
+					]}
+				/>
+				{post && (
+					<Card 
+						// title={post.title}
+					>
+						<Paragraph>{post.body}</Paragraph>
+						<Card>
+							<Title className={style['comments']}>
+							Comments
+							</Title> 
+							<List
+								dataSource={comments}
+								renderItem={(comment: Comments) => (
+									<Card title={comment.name}>
+										<Paragraph>{comment.body}</Paragraph>
+										<Text className={style['email']}>Email: {comment.email}</Text>
+									</Card>
+								)}
+							/>
+							{comments.length > 0 && (
+								<div className={style['btn']}>
+									<Button className={style['button']} onClick={loadMoreComments}>
+								Load More
+									</Button>
+								</div>
+
 							)}
-						/>
-						{comments.length > 0 && (
-							<Button className={style['button']} onClick={loadMoreComments}>Load More</Button>
-						)}
-					</div>
-				</Card>
-			)}
+						</Card>
+					</Card>
+				)}
+			</Space>
 		</div>
 	);
 };

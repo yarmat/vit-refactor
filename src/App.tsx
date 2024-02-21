@@ -4,8 +4,8 @@ import Login from './pages/Login/Login';
 import AllPosts from './pages/AllPosts/AllPosts';
 import Post from './pages/Post/Post';
 import Error from './pages/Error/Error';
-import GuestLayout from './helpers/GuestLayout';
-import AuthLayout from './helpers/AuthLayout';
+import GuestLayout from './layouts/GuestLayout';
+import AuthLayout from './layouts/AuthLayout';
 
 const App: React.FC = () => {
 

@@ -3,7 +3,7 @@ import { Form, Input, Button, Spin, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import style from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState<string>('');
