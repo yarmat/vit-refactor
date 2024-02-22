@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Spin, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import style from './Login.module.css';
-import { useAuth } from '../../context/AuthContext';
+import useAuth from '@/hooks/useAuth.ts';
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState<string>('');

@@ -1,0 +1,18 @@
+.container {
+    width: 100%;
+    padding: 25px;
+}
+
+.comments {
+    text-align: center;
+}
+
+.email {
+    background-color: wheat;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px ;
+}

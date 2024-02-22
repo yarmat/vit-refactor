@@ -1,11 +1,11 @@
 import React from 'react'; 
 import { Button, Card, Layout, Space, Typography } from 'antd';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; 
 import { Footer } from 'antd/es/layout/layout';
 import { InstagramOutlined, GithubOutlined, LoginOutlined } from '@ant-design/icons';
 import style from './AuthLayout.module.css';
 import Link from 'antd/es/typography/Link';
+import useAuth from '@/hooks/useAuth.ts';
 
 const { Content, Header } = Layout;
 const { Title } = Typography;

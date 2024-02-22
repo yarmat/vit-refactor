@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -6,7 +6,7 @@ interface AuthContextType {
     logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
 	isLoggedIn: false,
 	login: () => {},
 	logout: () => {}
@@ -35,8 +35,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 			{children}
 		</AuthContext.Provider>
 	);
-};
-
-export const useAuth = () => {
-	return useContext(AuthContext);
 };
