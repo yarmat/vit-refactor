@@ -22,3 +22,7 @@
     justify-content: center ;
 }
 
+.card {
+    margin-bottom: 20px;
+    border: 1px solid red;
+}

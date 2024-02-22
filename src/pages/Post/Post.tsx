@@ -83,11 +83,13 @@ const Post: React.FC = () => {
 					<Card>
 						<Title className={style['comments']}>
 							Comments
-						</Title> 
-						<List
+						</Title>
+						<List 
 							dataSource={comments}
 							renderItem={(comment: Comments) => (
-								<Card title={comment.name}>
+								<Card
+									className={style['card']}  
+									title={comment.name}>
 									<Paragraph>{comment.body}</Paragraph>
 									<Text className={style['email']}>Email: {comment.email}</Text>
 								</Card>
