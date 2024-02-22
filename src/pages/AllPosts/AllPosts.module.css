@@ -1,4 +1,5 @@
-.header {
+.title {
+    height: 65px;
     display: flex;
     justify-content: center;
     align-items: center;

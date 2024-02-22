@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Spin, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import style from './Login.module.css';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Login: React.FC = () => {
@@ -10,7 +9,6 @@ const Login: React.FC = () => {
 	const [password, setPassword] = useState<string>('');
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null); 
-	const navigate = useNavigate();
 	const {login} = useAuth();
 
 	const handleLogin = () => {
@@ -19,7 +17,6 @@ const Login: React.FC = () => {
 			setTimeout(() => {
 				setLoading(false);
 				login();
-				navigate('/posts');
 			}, 2000);
 		} else {
 			setError('Incorrect username or password');
@@ -61,6 +58,7 @@ const Login: React.FC = () => {
 				<Spin spinning={loading} fullscreen={true}/>
 			</Form>
 			{error && <Alert 
+				className={style['error-message']}
 				message={error}
 				type='error'
 				showIcon />}

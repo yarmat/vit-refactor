@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PREFIX } from '../../helpers/API';
 import { PostProps } from '../../interfaces/post.interface';
-import { Button, Table, FloatButton, Popconfirm, Space, Layout, Typography } from 'antd';
+import { Button, Table, FloatButton, Popconfirm, Space, Typography, Card } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined, FileSearchOutlined } from '@ant-design/icons';
 import style from './AllPosts.module.css';
 import { Link } from 'react-router-dom';
 import PostManageModal from './Partials/PostManageModal';
 
-const { Content, Header } = Layout;
 const { Title } = Typography;
 
 const AllPosts: React.FC = () => {
@@ -103,17 +102,13 @@ const AllPosts: React.FC = () => {
 
 	return (
 		<div>
-			<Header className={style['header']}>
-				<Title level={2}>All Posts</Title>
-			</Header>
-			<Content>
-				<div>
-					<PostManageModal 
-						onSuccess={post => setDataSource(prev => [post, ...prev])}
-					>
-						<FloatButton tooltip={<div>Add Post</div>} type="primary" icon={<PlusOutlined />}/>
-					</PostManageModal>
-				</div>
+			<Title style={{margin: 0}} className={style['title']} level={2}>All Posts</Title>
+			<Card>
+				<PostManageModal 
+					onSuccess={post => setDataSource(prev => [post, ...prev])}
+				>
+					<FloatButton tooltip={<div>Add Post</div>} type="primary" icon={<PlusOutlined />}/>
+				</PostManageModal>
 				<Table 
 					loading={loading}
 					columns={columns}
@@ -126,7 +121,7 @@ const AllPosts: React.FC = () => {
 						onChange: handlePaginationChange
 					}}
 				/>
-			</Content>
+			</Card>
 		</div>
 	);
 };
